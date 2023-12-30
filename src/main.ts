@@ -14,57 +14,36 @@ const CANVAS_WIDTH = 500
 canvas.width = CANVAS_WIDTH
 canvas.height = CANVAS_HEIGHT
 
-const numberOfEnemies = 10
-const enemies: Enemy[] = []
+const explosions = []
+let canvasPosition = canvas.getBoundingClientRect()
 
 let gameFrame = 0
 
-class Enemy {
+class Explosion {
     x: number
-    newX: number
     y: number
-    newY: number
     width: number
     spriteHeight: number
     spriteWidth: number
     height: number
     speed: number
-    flapSpeed: number
     frame: number
-    interval: number
     image: HTMLImageElement
 
-    constructor() {
+    constructor(x: number, y: number) {
         this.image = new Image()
-        this.image.src = 'assets/enemy4.png'
+        this.image.src = 'assets/boom.png'
         this.speed = Math.random() * 4 + 1
-        this.flapSpeed = Math.floor(Math.random() * 3 + 1)
-        this.spriteWidth = 213
-        this.spriteHeight = 213
-        this.width = this.spriteWidth * 0.4
-        this.height = this.spriteHeight * 0.4
-        this.newX = Math.random() * (canvas.width - this.width)
-        this.x = Math.random() * (canvas.width - this.width)
-        this.y = Math.random() * (canvas.height - this.height)
-        this.newY = Math.random() * (canvas.height - this.height)
+        this.spriteWidth = 200
+        this.spriteHeight = 179
+        this.width = this.spriteWidth * 0.5
+        this.height = this.spriteHeight * 0.5
+        this.x = x
+        this.y = y
         this.frame = 0
-        this.interval = Math.floor(Math.random() * 100 + 50)
     }
     update() {
-        if (gameFrame % this.interval === 0) {
-            this.newX = Math.random() * (canvas.width - this.width)
-            this.newY = Math.random() * (canvas.height - this.height)
-        }
-        let dx = this.x - this.newX
-        let dy = this.y - this.newY
-        this.x -= dx / 60
-        this.y -= dy / 30
-        // this.x -= this.speed
-        // this.y += this.curve * Math.sin(this.angle)
-        if (this.x + this.width < 0) this.x = canvas.width
-        if (gameFrame % this.flapSpeed === 0) {
-            this.frame > 4 ? (this.frame = 0) : this.frame++
-        }
+        this.frame++
     }
     draw() {
         ctx?.drawImage(
@@ -84,16 +63,20 @@ class Enemy {
         this.draw()
     }
 }
+//
+// const animate = () => {
+//     ctx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+//     gameFrame++
+//     requestAnimationFrame(animate)
+// }
+//
+// animate()
 
-for (let i = 0; i < numberOfEnemies; i++) {
-    enemies.push(new Enemy())
-}
+window.addEventListener('click', (e: MouseEvent) => {
+    console.log(e)
+    console.log(ctx)
+    if (!ctx) return
 
-const animate = () => {
-    ctx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-    enemies.forEach((enemy) => enemy.animate())
-    gameFrame++
-    requestAnimationFrame(animate)
-}
-
-animate()
+    ctx.fillStyle = 'red'
+    ctx.fillRect(e.x - canvasPosition.left, e.y - canvasPosition.top, 50, 50)
+})
