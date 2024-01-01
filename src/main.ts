@@ -77,6 +77,6 @@ window.addEventListener('click', (e: MouseEvent) => {
     console.log(ctx)
     if (!ctx) return
 
-    ctx.fillStyle = 'red'
-    ctx.fillRect(e.x - canvasPosition.left, e.y - canvasPosition.top, 50, 50)
+    let positionX = e.x - canvasPosition.left
+    let positionY = e.y - canvasPosition.top
 })
