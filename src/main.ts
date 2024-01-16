@@ -79,4 +79,5 @@ window.addEventListener('click', (e: MouseEvent) => {
 
     let positionX = e.x - canvasPosition.left
     let positionY = e.y - canvasPosition.top
+    explosions.push(new Explosion(positionX, positionY))
 })
