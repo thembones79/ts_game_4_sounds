@@ -14,7 +14,7 @@ const CANVAS_WIDTH = 500
 canvas.width = CANVAS_WIDTH
 canvas.height = CANVAS_HEIGHT
 
-const explosions = []
+const explosions: Explosion[] = []
 let canvasPosition = canvas.getBoundingClientRect()
 
 let gameFrame = 0
@@ -28,6 +28,7 @@ class Explosion {
     height: number
     speed: number
     frame: number
+    timer: number
     image: HTMLImageElement
 
     constructor(x: number, y: number) {
@@ -36,16 +37,21 @@ class Explosion {
         this.speed = Math.random() * 4 + 1
         this.spriteWidth = 200
         this.spriteHeight = 179
-        this.width = this.spriteWidth * 0.5
-        this.height = this.spriteHeight * 0.5
-        this.x = x
-        this.y = y
+        this.width = this.spriteWidth * 0.7
+        this.height = this.spriteHeight * 0.7
+        this.x = x - this.width * 0.5
+        this.y = y - this.height * 0.5
         this.frame = 0
+        this.timer = 0
     }
     update() {
-        this.frame++
+        this.timer++
+        if (this.timer % 10 === 0) {
+            this.frame++
+        }
     }
     draw() {
+        ctx?.save()
         ctx?.drawImage(
             this.image,
             this.frame * this.spriteWidth,
@@ -57,27 +63,36 @@ class Explosion {
             this.width,
             this.height
         )
+        ctx?.restore()
     }
     animate() {
         this.update()
         this.draw()
     }
 }
-//
-// const animate = () => {
-//     ctx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-//     gameFrame++
-//     requestAnimationFrame(animate)
-// }
-//
-// animate()
+
+const animate = () => {
+    ctx?.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+    for (let i = 0; i < explosions.length; i++) {
+        explosions[i].animate()
+        if (explosions[i].frame > 5) {
+            explosions.splice(i, 1)
+        }
+    }
+
+    // gameFrame++
+    requestAnimationFrame(animate)
+}
+
+animate()
 
 window.addEventListener('click', (e: MouseEvent) => {
-    console.log(e)
-    console.log(ctx)
-    if (!ctx) return
+    createAnimation(e)
+})
 
+const createAnimation = (e: MouseEvent) => {
     let positionX = e.x - canvasPosition.left
     let positionY = e.y - canvasPosition.top
     explosions.push(new Explosion(positionX, positionY))
-})
+}
