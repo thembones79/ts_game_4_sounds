@@ -31,6 +31,7 @@ class Explosion {
     timer: number
     angle: number
     image: HTMLImageElement
+    sound: HTMLAudioElement
 
     constructor(x: number, y: number) {
         this.image = new Image()
@@ -44,9 +45,12 @@ class Explosion {
         this.y = y
         this.frame = 0
         this.timer = 0
-        this.angle = Math.random() * 6.2;
+        this.angle = Math.random() * 6.2
+        this.sound = new Audio()
+        this.sound.src = 'assets/boom.wav'
     }
     update() {
+        if (this.frame === 0) this.sound.play()
         this.timer++
         if (this.timer % 10 === 0) {
             this.frame++
@@ -54,8 +58,8 @@ class Explosion {
     }
     draw() {
         ctx?.save()
-        ctx?.translate(this.x,this.y);
-        ctx?.rotate(this.angle);
+        ctx?.translate(this.x, this.y)
+        ctx?.rotate(this.angle)
         ctx?.drawImage(
             this.image,
             this.frame * this.spriteWidth,
