@@ -29,6 +29,7 @@ class Explosion {
     speed: number
     frame: number
     timer: number
+    angle: number
     image: HTMLImageElement
 
     constructor(x: number, y: number) {
@@ -43,6 +44,7 @@ class Explosion {
         this.y = y - this.height * 0.5
         this.frame = 0
         this.timer = 0
+        this.angle = Math.random() * 6.2;
     }
     update() {
         this.timer++
@@ -52,6 +54,8 @@ class Explosion {
     }
     draw() {
         ctx?.save()
+        ctx?.translate(this.x,this.y);
+        ctx?.rotate(this.angle);
         ctx?.drawImage(
             this.image,
             this.frame * this.spriteWidth,
