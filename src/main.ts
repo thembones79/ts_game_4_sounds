@@ -40,8 +40,8 @@ class Explosion {
         this.spriteHeight = 179
         this.width = this.spriteWidth * 0.7
         this.height = this.spriteHeight * 0.7
-        this.x = x - this.width * 0.5
-        this.y = y - this.height * 0.5
+        this.x = x
+        this.y = y
         this.frame = 0
         this.timer = 0
         this.angle = Math.random() * 6.2;
@@ -62,8 +62,8 @@ class Explosion {
             0,
             this.spriteWidth,
             this.spriteHeight,
-            this.x,
-            this.y,
+            0 - this.width * 0.5,
+            0 - this.height * 0.5,
             this.width,
             this.height
         )
